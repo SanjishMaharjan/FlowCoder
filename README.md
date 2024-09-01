@@ -28,7 +28,7 @@ Ensure you have [Node.js](https://nodejs.org/) (version 14 or higher) installed 
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/flowcode.git
+https://github.com/SanjishMaharjan/FlowCoder.git
 cd flowcode
 ```
 
