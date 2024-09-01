@@ -1,6 +1,37 @@
-import { Handle, Position } from '@xyflow/react'
+import { useEffect } from 'react'
+import { Handle, Position, useReactFlow } from '@xyflow/react'
 
-function DiamondNode({ data }: any) {
+function DiamondNode({ data, id }: any) {
+  const { setEdges, getNode } = useReactFlow()
+
+  useEffect(() => {
+    const sourceNodeId = id
+    const leftTargetId = data.leftTargetId || 'default-left-target'
+    const rightTargetId = data.rightTargetId || 'default-right-target'
+
+    setEdges((eds) => [
+      ...eds,
+      {
+        id: `${sourceNodeId}-left-edge`,
+        source: sourceNodeId,
+        sourceHandle: 'false',
+        target: leftTargetId,
+        type: 'smoothstep',
+        animated: true,
+        style: { stroke: '#ff0000' },
+      },
+      {
+        id: `${sourceNodeId}-right-edge`,
+        source: sourceNodeId,
+        sourceHandle: 'true',
+        type: 'smoothstep',
+        target: rightTargetId,
+        animated: true,
+        style: { stroke: '#00ff00' },
+      },
+    ])
+  }, [id, setEdges, getNode, data.leftTargetId, data.rightTargetId])
+
   return (
     <div
       style={{
@@ -15,7 +46,9 @@ function DiamondNode({ data }: any) {
         position: 'relative',
       }}
     >
-      <div style={{ transform: 'rotate(-45deg)' }}>{data.label}</div>
+      <div style={{ transform: 'rotate(-45deg)', textAlign: 'center' }}>
+        <div>{data.label}</div>
+      </div>
       <Handle
         type="target"
         position={Position.Top}

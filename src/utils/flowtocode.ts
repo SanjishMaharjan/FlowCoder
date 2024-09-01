@@ -77,7 +77,43 @@ export function generateCode(nodes: any[], edges: any[]): string {
         break;
 
       case 'diamond':
-        code += `if (${data.label}) {\n  // condition is true\n} else {\n  // condition is false\n}\n\n`;
+        code += `if (${data.label}) {\n`;
+        if (data.trueComponent) {
+          code += `  // True condition\n`;
+          code += `  // ${data.rightType} component: ${data.trueComponent}\n`;
+          switch (data.rightType) {
+            case 'circle':
+              code += `  /* Your Application ${data.trueComponent} here */\n`;
+              break;
+            case 'parallelogram':
+              code += `  let ${data.trueComponent};\n`;
+              break;
+            case 'rectangle':
+              code += `  function ${data.trueComponent}() {\n    // Add your code here\n  }\n`;
+              break;
+          }
+        } else {
+          code += `  // True condition\n  // Add your code here\n`;
+        }
+        code += `} else {\n`;
+        if (data.falseComponent) {
+          code += `  // False condition\n`;
+          code += `  // ${data.leftType} component: ${data.falseComponent}\n`;
+          switch (data.leftType) {
+            case 'circle':
+              code += `  /* Your Application ${data.falseComponent} here */\n`;
+              break;
+            case 'parallelogram':
+              code += `  let ${data.falseComponent};\n`;
+              break;
+            case 'rectangle':
+              code += `  function ${data.falseComponent}() {\n    // Add your code here\n  }\n`;
+              break;
+          }
+        } else {
+          code += `  // False condition\n  // Add your code here\n`;
+        }
+        code += `}\n\n`;
         break;
 
       default:

@@ -1,25 +1,49 @@
+import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import { FaSquare, FaCircle } from 'react-icons/fa'
 import { BsDatabase, BsFillDiamondFill } from 'react-icons/bs'
-import Parallelogram from '../assets/icons/parallelogram.svg'
 import { MdTextFields } from 'react-icons/md'
+import Parallelogram from '../assets/icons/parallelogram.svg'
+import { FaCircleChevronLeft } from 'react-icons/fa6'
+import { FcFlowChart } from 'react-icons/fc'
 
 interface SideMenuProps {
   addNode: (type: string) => void
-  isCollapsed: boolean
 }
 
-const SideMenu = ({ addNode, isCollapsed }: SideMenuProps) => {
+const SideMenu = ({ addNode }: SideMenuProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed)
+
   return (
-    <div
-      className={`${
-        isCollapsed ? 'w-16' : 'w-64'
-      } p-6 h-full bg-gradient-to-b from-gray-200 to-gray-300 rounded-xl w-48 shadow-lg`}
-    >
-      <div className={`p-6 ${isCollapsed ? 'hidden' : 'block'} flex-grow`}>
-        <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
-          Flowchart Shapes
-        </h2>
-        <div className="space-y-6">
+    <div className="flex mt-1 rounded-2xl bg-gray-100">
+      <div
+        className={`${
+          isCollapsed ? 'w-16' : 'w-64'
+        } p-2 h-[94vh] shadow-lg transition-all duration-300 ease-in-out flex flex-col`}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2
+            className={`text-2xl font-bold text-blue-700 ${
+              isCollapsed ? 'hidden' : 'block'
+            }`}
+          >
+            Flowchart Shapes
+          </h2>
+          <button
+            onClick={toggleCollapse}
+            className="text-blue-600 hover:text-blue-800"
+          >
+            {isCollapsed ? (
+              <FcFlowChart size={42} />
+            ) : (
+              <FaCircleChevronLeft size={24} />
+            )}
+          </button>
+        </div>
+
+        <div className="space-y-5 flex-grow">
           {[
             { type: 'circle', icon: FaCircle, label: 'Begin/End' },
             {
@@ -35,7 +59,9 @@ const SideMenu = ({ addNode, isCollapsed }: SideMenuProps) => {
           ].map((item) => (
             <div
               key={item.type}
-              className="flex items-center space-x-4 p-3 bg-white rounded-lg shadow-md hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+              className={`flex items-center ${
+                isCollapsed ? 'justify-center' : 'space-x-10'
+              } px-3 py-2 bg-white rounded-lg shadow-md hover:bg-blue-50 transition-colors duration-200 cursor-pointer`}
               onClick={() => addNode(item.type)}
             >
               {item.isImage ? (
@@ -43,10 +69,19 @@ const SideMenu = ({ addNode, isCollapsed }: SideMenuProps) => {
               ) : (
                 <item.icon className="text-blue-600" size={40} />
               )}
-              <span className="text-gray-800 font-medium">{item.label}</span>
+              <span
+                className={`text-gray-800 font-medium ${
+                  isCollapsed ? 'hidden' : 'block'
+                }`}
+              >
+                {item.label}
+              </span>
             </div>
           ))}
         </div>
+      </div>
+      <div className="flex-1">
+        <Outlet />
       </div>
     </div>
   )
